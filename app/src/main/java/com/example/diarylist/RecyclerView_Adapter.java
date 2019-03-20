@@ -7,10 +7,14 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.example.diarylist.CustomView.SlidingMenu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +23,14 @@ public class RecyclerView_Adapter extends RecyclerView.Adapter<RecyclerView_Adap
 
     private static final String TAG = "RecyclerView_Adapter";
 
+    //该list中，有多少item被标记为置顶项目 ，以后添加的item都会放在置顶项目的下方
+    private int top_number = 0;
+
+    //关于侧滑菜单中，侧滑一个新菜单，原先的菜单就要被关闭
+    private SlidingMenu mOpenMenu;
+    //避免同时划开多个item
+//    private SlidingMenu mScrollingMenu;
+
     private List<RecyclerView_item> items;
     private Context context;
 
@@ -26,18 +38,20 @@ public class RecyclerView_Adapter extends RecyclerView.Adapter<RecyclerView_Adap
      * 把点击响应的事件放在activity中去响应，看看能不能同时响应侧滑事件和子项控件点击事件
      * //成了个功！！！！！！！！！！！！！！！！！！！！！同时响应了
      */
-    public interface OnItemClickLitener
-    {
+    public interface OnItemClickLitener {
         void onImageClick(RecyclerView_item item);
 
         void onContextClick(RecyclerView_item item);
+
+        void onMenuRemoveClick(int position);
+
+        void onMenuTopClick(int position, Boolean is_Top);
     }
 
     private OnItemClickLitener mOnItemClickLitener;
 
     //在activity中初始化mOnItemClickLitener
-    public void setOnItemClickLitener(OnItemClickLitener mOnItemClickLitener)
-    {
+    public void setOnItemClickLitener(OnItemClickLitener mOnItemClickLitener) {
         this.mOnItemClickLitener = mOnItemClickLitener;
     }
 
@@ -46,6 +60,9 @@ public class RecyclerView_Adapter extends RecyclerView.Adapter<RecyclerView_Adap
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
         TextView textView;
+        TextView menuRemove, menuTop;
+//        SlidingMenu slidingMenu;
+//        LinearLayout context;
 //        String context;
 //        String title;
 //        int img_id;
@@ -54,6 +71,8 @@ public class RecyclerView_Adapter extends RecyclerView.Adapter<RecyclerView_Adap
             super(view);
             imageView = (ImageView) view.findViewById(R.id.recycler_item_img);
             textView = (TextView) view.findViewById(R.id.recycler_item_text);
+            menuRemove = (TextView) view.findViewById(R.id.menuRemove);
+            menuTop = (TextView) view.findViewById(R.id.menuTop);
         }
     }
 
@@ -65,8 +84,9 @@ public class RecyclerView_Adapter extends RecyclerView.Adapter<RecyclerView_Adap
     //在三个复写的方法中设置好ViewHolder
 
     /**
-     *  初始化ViewHolder要绑定的XML子项布局文件
-     *  定义子项布局文件的响应行为
+     * 初始化ViewHolder要绑定的XML子项布局文件
+     * 定义子项布局文件的响应行为
+     *
      * @param viewGroup
      * @param i
      * @return
@@ -118,6 +138,17 @@ public class RecyclerView_Adapter extends RecyclerView.Adapter<RecyclerView_Adap
         viewHolder.imageView.setImageResource(item.getImg_id());
         viewHolder.textView.setText(item.getTitle());
 
+        //如果是置顶控件的话
+        if (item.getIs_top()) {
+            //
+            Log.d(TAG, "the item of :" + item.getTitle() + " isTop and to set BackgroundResource");
+            //不能用setBackgroundColor
+            viewHolder.textView.setBackgroundResource(R.color.gray_text);
+            viewHolder.menuTop.setText("取消置顶");
+        }else {
+            viewHolder.textView.setBackgroundResource(R.color.white);
+        }
+
 //        //这部分是在干什么呢？似乎是把每个viewHolder的数据绑定好了，然后在onCreateViewHolder中绑定的响应事件，viewHolder就能够正确的把数据放进intent的Extra中了
         //很明显，当我们在activity中，使用item本身来进行响应的时候，这个viewHolder存储的数据就不需要了
 //        viewHolder.context = item.getContext();
@@ -127,8 +158,10 @@ public class RecyclerView_Adapter extends RecyclerView.Adapter<RecyclerView_Adap
         //尝试在activity中处理图片的响应事件
 
         if (mOnItemClickLitener != null) {
-            viewHolder.imageView.setOnClickListener(v->mOnItemClickLitener.onImageClick(item));
-            viewHolder.textView.setOnClickListener(v->mOnItemClickLitener.onContextClick(item));
+            viewHolder.imageView.setOnClickListener(v -> mOnItemClickLitener.onImageClick(item));
+            viewHolder.textView.setOnClickListener(v -> mOnItemClickLitener.onContextClick(item));
+            viewHolder.menuRemove.setOnClickListener(v -> mOnItemClickLitener.onMenuRemoveClick(i));
+            viewHolder.menuTop.setOnClickListener(v -> mOnItemClickLitener.onMenuTopClick(i, item.getIs_top()));
         }
     }
 
@@ -149,18 +182,91 @@ public class RecyclerView_Adapter extends RecyclerView.Adapter<RecyclerView_Adap
      * @param position
      */
     public void addItem(int position, RecyclerView_item item) {
-        items.add(position,item);
+        items.add(position, item);
         notifyItemInserted(position);
     }
 
     /**
-     * 删除，并且
+     * 删除
+     *
      * @param position
      */
     public void removeItem(int position) {
         items.remove(position);
-        notifyItemRangeChanged(0,getItemCount());
+        notifyItemRangeChanged(0, getItemCount());
         notifyDataSetChanged();
     }
 
+    /**
+     * 置顶，并且更新textView的颜色
+     * 这个地方啊，效率是不是太低了，感觉通知了很多次更新事件
+     *
+     * @param position
+     */
+    public void addTopItem(int position) {
+        RecyclerView_item item = items.get(position);
+        //把原先的item添加到开头
+        items.add(0, item);
+        //把之前位置的item删除掉，因为在开头加了一个item，所以position要+1
+//        removeItem(position + 1);
+        //设为置顶的item数量加1
+        items.remove(position+1);
+        top_number++;
+        //改变item的置顶标识
+        item.setIs_top(true);
+        Log.d(TAG, "the item title is: " + item.getTitle() + ", and the top_number is: " + top_number);
+        //通知更新颜色，能做到吗。。。
+        //做到了！！更新了！！！！ 吃了一惊
+        notifyDataSetChanged();
+        for (RecyclerView_item item1 : items) {
+            if (item1.getIs_top()) {
+                Log.d(TAG, "the item of :" + item1.getTitle() + " isTop");
+            }
+        }
+    }
+
+    public void removeTopItem(int position) {
+        RecyclerView_item item = items.get(position);
+
+        //把原来在list中置顶的项目删掉
+        items.remove(position);
+        top_number--;
+        //把这个Item设置到list的置顶后的位置
+        items.add(0 + top_number, item);
+        //更改置顶标识
+        item.setIs_top(false);
+        notifyDataSetChanged();
+    }
+
+
+    public int getTop_number() {
+        return top_number;
+    }
+
+    /**
+     * 记录打开的是哪个侧滑菜单view，方便关闭侧滑菜单
+     *
+     * @param slidingMenu
+     */
+    public void holdOpenMenu(SlidingMenu slidingMenu) {
+        mOpenMenu = slidingMenu;
+    }
+
+    /**
+     * 关闭之前打开的侧滑菜单
+     */
+    public void closeOpenMenu() {
+        if (mOpenMenu != null && mOpenMenu.isOpen()) {
+            mOpenMenu.closeMenu();
+        }
+    }
+
+
+//    public SlidingMenu getScrollingMenu() {
+//        return mScrollingMenu;
+//    }
+//
+//    public void setScrollingMenu(SlidingMenu scrollingMenu) {
+//        mScrollingMenu = scrollingMenu;
+//    }
 }

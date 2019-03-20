@@ -14,7 +14,9 @@ public class RecyclerView_item {
 
     private ObservableField<Integer> img_id = new ObservableField<>();
 
-    public RecyclerView_item() {
+    private Boolean is_top = false;
+
+  public RecyclerView_item() {
         title.set("");
         context.set("");
         img_id.set(R.drawable.a20);
@@ -54,5 +56,13 @@ public class RecyclerView_item {
 
     public void setImg_id(int img_id) {
         this.img_id.set(img_id);
+    }
+
+    public Boolean getIs_top() {
+        return is_top;
+    }
+
+    public void setIs_top(Boolean is_top) {
+        this.is_top = is_top;
     }
 }

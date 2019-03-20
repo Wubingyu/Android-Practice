@@ -9,16 +9,13 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.yanzhenjie.recyclerview.OnItemMenuClickListener;
-import com.yanzhenjie.recyclerview.SwipeMenu;
-import com.yanzhenjie.recyclerview.SwipeMenuBridge;
-import com.yanzhenjie.recyclerview.SwipeMenuCreator;
-import com.yanzhenjie.recyclerview.SwipeMenuItem;
-import com.yanzhenjie.recyclerview.SwipeRecyclerView;
+
+import com.example.diarylist.CustomView.SlidingMenu;
 
 import java.util.ArrayList;
 
@@ -34,8 +31,10 @@ public class RecyclerView_activity extends AppCompatActivity {
      */
     ArrayList<RecyclerView_item> recyclerView_items = new ArrayList<RecyclerView_item>();
     FloatingActionButton FAB;
-    SwipeRecyclerView recyclerView;
+    RecyclerView recyclerView;
 
+    //关于SlidingMenu的touch事件
+//    long downTime = 0;
 
 
     RecyclerView_Adapter adapter;
@@ -52,12 +51,12 @@ public class RecyclerView_activity extends AppCompatActivity {
 
         //出现了一个面只有一个子项的情况，这是为什么呢?
         //因为子项的布局中，把子项的布局高度设为match_parent
-        recyclerView = (SwipeRecyclerView) findViewById(R.id.recyclerList);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerList);
 
         //SwipeRecyclerView的设置尝试
         //侧滑菜单
-        recyclerView.setSwipeMenuCreator(swipeMenuCreator);
-        recyclerView.setOnItemMenuClickListener(mMenuItemClickListener);
+//        recyclerView.setSwipeMenuCreator(swipeMenuCreator);
+//        recyclerView.setOnItemMenuClickListener(mMenuItemClickListener);
 
         //配置adapter和layoutManager
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
@@ -91,6 +90,21 @@ public class RecyclerView_activity extends AppCompatActivity {
                 intent.putExtra("title", item.getTitle());
                 intent.putExtra("img_id", item.getImg_id());
                 startActivity(intent);
+            }
+
+            @Override
+            public void onMenuRemoveClick(int position) {
+                adapter.removeItem(position);
+            }
+
+            @Override
+            public void onMenuTopClick(int position, Boolean is_Top) {
+                if (is_Top) {
+                    //如果是取消置顶：
+                    adapter.removeTopItem(position);
+                } else {
+                    adapter.addTopItem(position);
+                }
             }
         });
 
@@ -129,8 +143,8 @@ public class RecyclerView_activity extends AppCompatActivity {
                     String context = data.getStringExtra(ACTIVITY_RESULT_CONTEXT);
 
                     RecyclerView_item recyclerView_item = new RecyclerView_item(title, context, R.drawable.a2);
-                    //问题：
-                    adapter.addItem(0, recyclerView_item);
+                    //更新的item都要在置顶item的下面
+                    adapter.addItem(0 + adapter.getTop_number(), recyclerView_item);
                     recyclerView.smoothScrollToPosition(0);
 
                 }
@@ -184,80 +198,84 @@ public class RecyclerView_activity extends AppCompatActivity {
     }
 
 
-    /**
-     * 菜单创建器，在Item要创建菜单的时候调用。
-     */
-    private SwipeMenuCreator swipeMenuCreator = new SwipeMenuCreator() {
-        @Override
-        public void onCreateMenu(SwipeMenu swipeLeftMenu, SwipeMenu swipeRightMenu, int position) {
-            int width = getResources().getDimensionPixelSize(R.dimen.dp_70);
-
-            // 1. MATCH_PARENT 自适应高度，保持和Item一样高;
-            // 2. 指定具体的高，比如80;
-            // 3. WRAP_CONTENT，自身高度，不推荐;
-            int height = ViewGroup.LayoutParams.MATCH_PARENT;
-
-            // 添加左侧的，如果不添加，则左侧不会出现菜单。
-            {
-                SwipeMenuItem addItem = new SwipeMenuItem(RecyclerView_activity.this).setBackground(R.drawable.selector_green)
-                        .setImage(R.drawable.ic_action_add)
-                        .setWidth(width)
-                        .setHeight(height);
-                swipeLeftMenu.addMenuItem(addItem); // 添加菜单到左侧。
-
-                SwipeMenuItem closeItem = new SwipeMenuItem(RecyclerView_activity.this).setBackground(R.drawable.selector_red)
-                        .setImage(R.drawable.ic_action_close)
-                        .setWidth(width)
-                        .setHeight(height);
-                swipeLeftMenu.addMenuItem(closeItem); // 添加菜单到左侧。
-            }
-
-            // 添加右侧的，如果不添加，则右侧不会出现菜单。
-            {
-                SwipeMenuItem deleteItem = new SwipeMenuItem(RecyclerView_activity.this).setBackground(R.drawable.selector_red)
-                        .setImage(R.drawable.ic_action_delete)
-                        .setText("删除")
-                        .setTextColor(Color.WHITE)
-                        .setWidth(width)
-                        .setHeight(height);
-                swipeRightMenu.addMenuItem(deleteItem);// 添加菜单到右侧。
-
-                SwipeMenuItem addItem = new SwipeMenuItem(RecyclerView_activity.this).setBackground(R.drawable.selector_green)
-                        .setText("添加")
-                        .setTextColor(Color.WHITE)
-                        .setWidth(width)
-                        .setHeight(height);
-                swipeRightMenu.addMenuItem(addItem); // 添加菜单到右侧。
-            }
-        }
-    };
-
-
-    /**
-     * RecyclerView的Item的Menu点击监听。
-     */
-    private OnItemMenuClickListener mMenuItemClickListener = new OnItemMenuClickListener() {
-        @Override
-        public void onItemClick(SwipeMenuBridge menuBridge, int position) {
-            Log.d(TAG, "click SwipeMenu");
-            menuBridge.closeMenu();
-
-            int direction = menuBridge.getDirection(); // 左侧还是右侧菜单。
-            int menuPosition = menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
-
-            if (direction == SwipeRecyclerView.RIGHT_DIRECTION) {
-                Log.d(TAG, "onItemClick: Right");
-                Toast.makeText(RecyclerView_activity.this, "list第" + position + "; 右侧菜单第" + menuPosition, Toast.LENGTH_SHORT)
-                        .show();
-                if (menuPosition == 0) {
-                    adapter.removeItem(position);
-                }
-
-            } else if (direction == SwipeRecyclerView.LEFT_DIRECTION) {
-                Log.d(TAG, "onItemClick: Left");
-                Toast.makeText(RecyclerView_activity.this, "list第" + position + "; 左侧菜单第" + menuPosition, Toast.LENGTH_SHORT)
-                        .show();
-            }
-        }
-    };
+//    /**
+//     * 菜单创建器，在Item要创建菜单的时候调用。
+//     */
+//    private SwipeMenuCreator swipeMenuCreator = new SwipeMenuCreator() {
+//        @Override
+//        public void onCreateMenu(SwipeMenu swipeLeftMenu, SwipeMenu swipeRightMenu, int position) {
+//            int width = getResources().getDimensionPixelSize(R.dimen.dp_70);
+//
+//            // 1. MATCH_PARENT 自适应高度，保持和Item一样高;
+//            // 2. 指定具体的高，比如80;
+//            // 3. WRAP_CONTENT，自身高度，不推荐;
+//            int height = ViewGroup.LayoutParams.MATCH_PARENT;
+//
+//            // 添加左侧的，如果不添加，则左侧不会出现菜单。
+////            {
+////                SwipeMenuItem addItem = new SwipeMenuItem(RecyclerView_activity.this).setBackground(R.drawable.selector_green)
+////                        .setImage(R.drawable.ic_action_add)
+////                        .setWidth(width)
+////                        .setHeight(height);
+////                swipeLeftMenu.addMenuItem(addItem); // 添加菜单到左侧。
+////
+////                SwipeMenuItem closeItem = new SwipeMenuItem(RecyclerView_activity.this).setBackground(R.drawable.selector_red)
+////                        .setImage(R.drawable.ic_action_close)
+////                        .setWidth(width)
+////                        .setHeight(height);
+////                swipeLeftMenu.addMenuItem(closeItem); // 添加菜单到左侧。
+////            }
+//
+//            // 添加右侧的，如果不添加，则右侧不会出现菜单。
+//            {
+//                SwipeMenuItem deleteItem = new SwipeMenuItem(RecyclerView_activity.this).setBackground(R.drawable.selector_red)
+//                        .setImage(R.drawable.ic_action_delete)
+//                        .setText("删除")
+//                        .setTextColor(Color.WHITE)
+//                        .setWidth(width)
+//                        .setHeight(height);
+//                swipeRightMenu.addMenuItem(deleteItem);// 添加菜单到右侧。
+//
+//                SwipeMenuItem toTopItem = new SwipeMenuItem(RecyclerView_activity.this).setBackground(R.drawable.selector_green)
+//                        .setText("置顶")
+//                        .setImage(R.drawable.ic_action_add)
+//                        .setTextColor(Color.WHITE)
+//                        .setWidth(width)
+//                        .setHeight(height);
+//                swipeRightMenu.addMenuItem(toTopItem); // 添加菜单到右侧。
+//            }
+//        }
+//    };
+//
+//
+//    /**
+//     * RecyclerView的Item的Menu点击监听。
+//     */
+//    private OnItemMenuClickListener mMenuItemClickListener = new OnItemMenuClickListener() {
+//        @Override
+//        public void onItemClick(SwipeMenuBridge menuBridge, int position) {
+//            Log.d(TAG, "click SwipeMenu");
+//            menuBridge.closeMenu();
+//
+//            int direction = menuBridge.getDirection(); // 左侧还是右侧菜单。
+//            int menuPosition = menuBridge.getPosition(); // 菜单在RecyclerView的Item中的Position。
+//
+//            if (direction == SwipeRecyclerView.RIGHT_DIRECTION) {
+//                Log.d(TAG, "onItemClick: Right");
+//                Toast.makeText(RecyclerView_activity.this, "list第" + position + "; 右侧菜单第" + menuPosition, Toast.LENGTH_SHORT)
+//                        .show();
+//
+//                if (menuPosition == 0) {
+//                    adapter.removeItem(position);
+//                } else if (menuPosition == 1) {
+//                    adapter.addTopItem(position);
+//                }
+//
+//            } else if (direction == SwipeRecyclerView.LEFT_DIRECTION) {
+//                Log.d(TAG, "onItemClick: Left");
+//                Toast.makeText(RecyclerView_activity.this, "list第" + position + "; 左侧菜单第" + menuPosition, Toast.LENGTH_SHORT)
+//                        .show();
+//            }
+//        }
+//    };
 }
