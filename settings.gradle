@@ -1,1 +1,1 @@
-include ':RecyclerView_SwipeMenu', ':article_edit'
+include ':RecyclerView_SwipeMenu', ':article_edit', ':are'
