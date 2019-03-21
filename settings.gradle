@@ -1,1 +1,1 @@
-include ':app'
+include ':RecyclerView_SwipeMenu', ':article_edit'
