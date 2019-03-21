@@ -17,6 +17,8 @@ import android.widget.TextView;
 import com.example.diarylist.CustomView.SlidingMenu;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class RecyclerView_Adapter extends RecyclerView.Adapter<RecyclerView_Adapter.ViewHolder> {
@@ -61,7 +63,7 @@ public class RecyclerView_Adapter extends RecyclerView.Adapter<RecyclerView_Adap
         ImageView imageView;
         TextView textView;
         TextView menuRemove, menuTop;
-//        SlidingMenu slidingMenu;
+        SlidingMenu slidingMenu;
 //        LinearLayout context;
 //        String context;
 //        String title;
@@ -73,12 +75,19 @@ public class RecyclerView_Adapter extends RecyclerView.Adapter<RecyclerView_Adap
             textView = (TextView) view.findViewById(R.id.recycler_item_text);
             menuRemove = (TextView) view.findViewById(R.id.menuRemove);
             menuTop = (TextView) view.findViewById(R.id.menuTop);
+            slidingMenu = (SlidingMenu) view.findViewById(R.id.slidingMenu);
         }
     }
 
     //初始化源数据
     public RecyclerView_Adapter(ArrayList<RecyclerView_item> items) {
         this.items = items;
+        SortList();
+        //这里布局正确，说明是置顶之后的位置，不对
+        for (RecyclerView_item item : items) {
+            Log.d(TAG, item.getTitle() + " getTime is: " + item.getTime());
+        }
+
     }
 
     //在三个复写的方法中设置好ViewHolder
@@ -145,8 +154,17 @@ public class RecyclerView_Adapter extends RecyclerView.Adapter<RecyclerView_Adap
             //不能用setBackgroundColor
             viewHolder.textView.setBackgroundResource(R.color.gray_text);
             viewHolder.menuTop.setText("取消置顶");
+            viewHolder.slidingMenu.closeMenu();
         }else {
+            /**
+             *不知道为什么，会有bug，就是明明属性不是Is_top但是依然会变色，变字
+             * 而且，滑动窗口也会自动打开？？？？
+             * 是在置顶的时候，item移动，然后移动的时候被判断为move行为了吗？看了下log，也没有啊
+             * 为什么呢？？？？
+             */
             viewHolder.textView.setBackgroundResource(R.color.white);
+            viewHolder.menuTop.setText("置顶");
+            viewHolder.slidingMenu.closeMenu();
         }
 
 //        //这部分是在干什么呢？似乎是把每个viewHolder的数据绑定好了，然后在onCreateViewHolder中绑定的响应事件，viewHolder就能够正确的把数据放进intent的Extra中了
@@ -235,6 +253,12 @@ public class RecyclerView_Adapter extends RecyclerView.Adapter<RecyclerView_Adap
         items.add(0 + top_number, item);
         //更改置顶标识
         item.setIs_top(false);
+        //按时间排列
+        SortList();
+        //奇了怪了SortList用在初始化list的时候，是对的。
+        //但是即使，只置顶了一个，它最后的顺序也不对。我怀疑，它根本没有遍历list。（排序算法了解一下。）
+//        for (RecyclerView_item item1 : items) {
+//        }
         notifyDataSetChanged();
     }
 
@@ -261,6 +285,32 @@ public class RecyclerView_Adapter extends RecyclerView.Adapter<RecyclerView_Adap
         }
     }
 
+    /**
+     * 对我的list进行排序，主要是在置顶栏点击取消置顶之后，item应该在哪里
+     *       //当返回1的时候排序方式是 t2,t1
+     *       //当返回-1的时候排序方式是t1,t2
+     *       1、2就是原本的顺序
+     *       而Time越大，越新，越前。所以o1 的 Time大的话，就是t1 t2的顺序 所以返回-1
+     *       但是如果，o1是置顶项的话，就不变顺序
+     *       Collections.sort(items, new Comparator<RecyclerView_item>()  根本不行！
+     *       为什么？
+     *
+     *       ??冒泡排序？？？？
+     */
+    void SortList() {
+        int size = getItemCount();
+        for (int i = top_number; i < size-1 ; i++) {  //n-1个位置需要判断，
+            for (int j = i + 1; j < size; j++) { //i 和它后面的所有数进行比较
+                //需要在位置i上，放上从i到size位置上，Time最大的一个item。
+                if (items.get(i).getTime() < items.get(j).getTime()) {
+                    RecyclerView_item temp = items.get(i);
+                    items.set(i, items.get(j));
+                    items.set(j, temp);
+                }
+            }
+
+        }
+    }
 
 //    public SlidingMenu getScrollingMenu() {
 //        return mScrollingMenu;

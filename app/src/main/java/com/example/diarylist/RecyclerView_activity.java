@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.diarylist.CustomView.SlidingMenu;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class RecyclerView_activity extends AppCompatActivity {
 
@@ -173,13 +174,14 @@ public class RecyclerView_activity extends AppCompatActivity {
             RecyclerView_item recyclerView_item16 = new RecyclerView_item("title17", "17", R.drawable.a17);
             RecyclerView_item recyclerView_item17 = new RecyclerView_item("title18", "18", R.drawable.a18);
             RecyclerView_item recyclerView_item18 = new RecyclerView_item("title19", "19", R.drawable.a19);
-            RecyclerView_item recyclerView_item19 = new RecyclerView_item("title20", "10", R.drawable.a20);
+            RecyclerView_item recyclerView_item19 = new RecyclerView_item("title20", "20", R.drawable.a20);
             recyclerView_items.add(recyclerView_item);
             recyclerView_items.add(recyclerView_item1);
             recyclerView_items.add(recyclerView_item2);
             recyclerView_items.add(recyclerView_item3);
             recyclerView_items.add(recyclerView_item4);
             recyclerView_items.add(recyclerView_item5);
+
             recyclerView_items.add(recyclerView_item6);
             recyclerView_items.add(recyclerView_item7);
             recyclerView_items.add(recyclerView_item8);
@@ -188,6 +190,7 @@ public class RecyclerView_activity extends AppCompatActivity {
             recyclerView_items.add(recyclerView_item11);
             recyclerView_items.add(recyclerView_item12);
             recyclerView_items.add(recyclerView_item13);
+
             recyclerView_items.add(recyclerView_item14);
             recyclerView_items.add(recyclerView_item15);
             recyclerView_items.add(recyclerView_item16);
