@@ -124,6 +124,8 @@ public class AREditor extends RelativeLayout {
 
     /**
      * Constructor.
+     * 就是在这里自定义属性的啊，来看看它是怎么自定义属性的。
+     * 然后改变我们使用的Bottom部分，这样就能自定义我们自己的富文本编辑器了。
      *
      * @param context
      * @param attrs
@@ -231,6 +233,7 @@ public class AREditor extends RelativeLayout {
             mAreScrollView.removeAllViews();
             this.removeView(mAreScrollView);
         }
+
         if (mToolbarAlignment == ToolbarAlignment.BOTTOM) {
             // EditText
             // Toolbar

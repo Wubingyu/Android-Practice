@@ -25,49 +25,62 @@ public class ArticleEdit_activity extends AppCompatActivity {
         initView();
     }
 
+    //对应layout中的富文本编辑部分
     private AREditor arEditor;
 
-    private VideoStrategy mVideoStrategy = new VideoStrategy() {
-        @Override
-        public String uploadVideo(Uri uri) {
-            try {
-                Thread.sleep(3000); // Do upload here
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return "http://www.xx.com/x.mp4";
-        }
-
-        @Override
-        public String uploadVideo(String videoPath) {
-            try {
-                Thread.sleep(3000);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return "http://www.xx.com/x.mp4";
-        }
-    };
-
-
+//    private VideoStrategy mVideoStrategy = new VideoStrategy() {
+//        @Override
+//        public String uploadVideo(Uri uri) {
+//            try {
+//                Thread.sleep(3000); // Do upload here
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            return "http://www.xx.com/x.mp4";
+//        }
+//
+//        @Override
+//        public String uploadVideo(String videoPath) {
+//            try {
+//                Thread.sleep(3000);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            return "http://www.xx.com/x.mp4";
+//        }
+//    };
 
     private void initView() {
         this.arEditor = this.findViewById(R.id.areditor);
-        this.arEditor.setVideoStrategy(mVideoStrategy);
+//        this.arEditor.setVideoStrategy(mVideoStrategy);
     }
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        this.arEditor.onActivityResult(requestCode, resultCode, data);
-    }
+    /**
+     * 这个emm onActivityResult不是在使用StartActivityForResult的时候的吗。但是似乎并没有用到啊？
+     * 先注释掉
+     */
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        this.arEditor.onActivityResult(requestCode, resultCode, data);
+//    }
 
+    /**
+     * 动态插入menu，重写activity中的方法，所以说啊，每个activity都可以自己来重写的
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
+    /**
+     *
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int menuId = item.getItemId();

@@ -102,7 +102,7 @@ public class ARE_Toolbar extends LinearLayout {
 	/**
 	 * Emoji Style
 	 */
-	private ARE_Emoji mEmojiStyle;
+//	private ARE_Emoji mEmojiStyle;
 
 	/**
 	 * Font-size Style
@@ -217,7 +217,7 @@ public class ARE_Toolbar extends LinearLayout {
 	/**
 	 * Emoji button.
 	 */
-	private ImageView mEmojiImageView;
+//	private ImageView mEmojiImageView;
 
 	/**
 	 * Absolute font size button.
@@ -374,7 +374,7 @@ public class ARE_Toolbar extends LinearLayout {
 
 	private void initViews() {
 
-		this.mEmojiImageView = this.findViewById(R.id.rteEmoji);
+//		this.mEmojiImageView = this.findViewById(R.id.rteEmoji);
 
 		this.mFontsizeImageView = this.findViewById(R.id.rteFontsize);
 
@@ -432,7 +432,7 @@ public class ARE_Toolbar extends LinearLayout {
 	 *
 	 */
 	private void initStyles() {
-		this.mEmojiStyle = new ARE_Emoji(this.mEmojiImageView);
+//		this.mEmojiStyle = new ARE_Emoji(this.mEmojiImageView);
 		this.mFontsizeStyle = new ARE_FontSize(this.mFontsizeImageView);
 		this.mFontfaceStyle = new ARE_Fontface(this.mFontfaceImageView);
 		this.mBoldStyle = new ARE_Bold(this.mBoldImageView);
@@ -457,7 +457,7 @@ public class ARE_Toolbar extends LinearLayout {
 		this.mVideoStyle = new ARE_Video(this.mRteInsertVideo);
 		this.mAtStyle = new ARE_At();
 
-		this.mStylesList.add(this.mEmojiStyle);
+//		this.mStylesList.add(this.mEmojiStyle);
 		this.mStylesList.add(this.mFontsizeStyle);
 		this.mStylesList.add(this.mFontfaceStyle);
 		this.mStylesList.add(this.mBoldStyle);
@@ -733,7 +733,7 @@ public class ARE_Toolbar extends LinearLayout {
 				mEmojiShownNow = true;
 
 				// 6. Change emoji icon to keyboard
-				mEmojiImageView.setImageResource(R.drawable.keyboard);
+//				mEmojiImageView.setImageResource(R.drawable.keyboard);
 			} else {
 				// Keyboard is shown now
 				// Toggle emoji panel to make the layout looks well for adjustPan
@@ -770,7 +770,7 @@ public class ARE_Toolbar extends LinearLayout {
 					mEmojiShownNow = false;
 
 					// 3. Change emoji icon to emoji
-					mEmojiImageView.setImageResource(R.drawable.emoji);
+//					mEmojiImageView.setImageResource(R.drawable.emoji);
 				} else {
 					// Case 2: keyboard is hidden and Emoji is hidden too
 					// And user clicks emoji icon
@@ -783,7 +783,7 @@ public class ARE_Toolbar extends LinearLayout {
 					// 1.1 Set emoji panel as shown now
 					mEmojiShownNow = true;
 					// 1.2 Change emoji icon to keyboard
-					mEmojiImageView.setImageResource(R.drawable.keyboard);
+//					mEmojiImageView.setImageResource(R.drawable.keyboard);
 				}
 
 			} else {
@@ -791,7 +791,7 @@ public class ARE_Toolbar extends LinearLayout {
 				// We should hide emoji panel
 				mEmojiPanelContainer.setVisibility(View.GONE);
 				mEmojiShownNow = false;
-				mEmojiImageView.setImageResource(R.drawable.emoji);
+//				mEmojiImageView.setImageResource(R.drawable.emoji);
 			}
 		}
 	}

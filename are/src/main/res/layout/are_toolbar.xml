@@ -29,13 +29,13 @@
             android:orientation="horizontal"
             android:background="?attr/colorPrimary">
 
-            <ImageView
-                android:id="@+id/rteEmoji"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:padding="5dp"
-                android:src="@drawable/emoji"
-                />
+            <!--<ImageView-->
+                <!--android:id="@+id/rteEmoji"-->
+                <!--android:layout_width="40dp"-->
+                <!--android:layout_height="40dp"-->
+                <!--android:padding="5dp"-->
+                <!--android:src="@drawable/emoji"-->
+                <!--/>-->
 
             <ImageView
                 android:id="@+id/rteFontsize"

@@ -13,11 +13,7 @@ import com.chinalwb.are.spans.AreVideoSpan;
 import com.chinalwb.are.strategies.AreClickStrategy;
 
 /**
- * @author dlink
- * @email linxy59@mail2.sysu.edu.cn
- * @date 2018/5/21
- * @discription null
- * @usage null
+ * 这个地方的调用是，展示TextView。
  */
 public class TextViewActivity extends AppCompatActivity {
     public static final String HTML_TEXT = "html_text";

@@ -23,6 +23,7 @@ import java.util.Date;
 
 public class DemoUtil {
 
+    //Util工具类
     @SuppressLint("SimpleDateFormat")
     public static void saveHtml(Activity activity, String html) {
         try {
