@@ -1,1 +1,1 @@
-include ':RecyclerView_SwipeMenu', ':roomtest'
+include ':RecyclerView_SwipeMenu', ':picture_canvas'
