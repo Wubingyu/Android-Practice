@@ -6,7 +6,7 @@
 
     <Button
         android:id="@+id/getPic"
-        android:text="choose picture from gallery"
+        android:text="Crop picture from gallery"
         android:textAllCaps="false"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />

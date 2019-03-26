@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import com.example.picture_canvas.R;
 import com.yalantis.ucrop.UCrop;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 /**
@@ -29,20 +31,28 @@ public class CropPicture extends AppCompatActivity {
     private static final String TAG = "CropPicture";
     public static final int CHOOSE_PHOTO = 1;
 
+    //看看是否bitmap = data.getParcelableExtra("data"); 就是拿到剪切后的照片
+    Bitmap bitmap;
+
     //这个应该是指存储目标名？好像是这样，但是实际上在MT管理器中发现存储名字前面还有一串数字，这个数字是从哪里来的呢？
     private static final String SAMPLE_CROPPED_IMAGE_NAME = "SampleCropImage";
 
     Button button_getPic;
     ImageView showPic;
+//    Button button_toShowBitmap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crop_picture);
 
+        bitmap = BitmapFactory.decodeResource(this.getResources(), R.drawable.sakura);
         //UCrop的使用方法似乎是用uri的，所以放在R.drawable中的图片没啥子用
         button_getPic = findViewById(R.id.Crop_getPic);
         showPic = findViewById(R.id.Crop_imgShow);
-        button_getPic.setOnClickListener(v->openAlbum());
+
+        button_getPic.setOnClickListener(v -> openAlbum());
+
+
     }
 
     private void openAlbum() {
@@ -62,12 +72,23 @@ public class CropPicture extends AppCompatActivity {
                     break;
                 case UCrop.REQUEST_CROP:
                     final Uri resultUri = UCrop.getOutput(data);
-                    String imagePath = getTruePath(resultUri);
-                    if (imagePath.isEmpty()) {
-                        Log.d(TAG, "cannot get the true imagePath");
-                    } else {
-                        displayImage(imagePath); // 根据图片路径显示图片
+
+                    //成功取得bitmap这样之后就存bitmap到数据库就ok了！
+                    try {
+                        if(resultUri!=null) {
+                            Bitmap bit = BitmapFactory.decodeStream(getContentResolver().openInputStream(resultUri));
+                            showPic.setImageBitmap(bit);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+
+//                    String imagePath = getTruePath(resultUri);
+//                    if (imagePath.isEmpty()) {
+//                        Log.d(TAG, "cannot get the true imagePath");
+//                    } else {
+//                        displayImage(imagePath); // 根据图片路径显示图片
+//                    }
             }
         }
     }
