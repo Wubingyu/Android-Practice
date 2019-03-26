@@ -7,7 +7,7 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 
-@Database(entities = {User.class, Article.class}, version = 3)
+@Database(entities = {User.class, Article.class}, version = 4)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase sInstance;
@@ -23,8 +23,8 @@ public abstract class AppDatabase extends RoomDatabase {
                 if (sInstance == null) {
                     sInstance = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, "sampleDb")
-//                            .addMigrations(MIGRATION_3_4)
-                            .fallbackToDestructiveMigration() //使用这个方法，数据被清空，不需要使用Migration
+                            .addMigrations(MIGRATION_3_4)
+//                            .fallbackToDestructiveMigration() //使用这个方法，数据被清空，不需要使用Migration
                             .build();
                 }
             }
@@ -43,7 +43,7 @@ public abstract class AppDatabase extends RoomDatabase {
      * 每次的版本更新的不同情况，都需要使用定义不同的Migration
      * 参考：http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2017/0728/8278.html
      */
-    static final Migration MIGRATION_3_4 = new Migration(2, 3) {
+    static final Migration MIGRATION_3_4 = new Migration(3, 4) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
             // if we didn't alter(修改) the table, there's nothing else to do here.
@@ -51,7 +51,7 @@ public abstract class AppDatabase extends RoomDatabase {
             //3_4增加表Article
             //没有创建成功吗，这个语句？
             database.execSQL(
-                    "CREATE TABLE article (Article_id INTEGER, isInCreate INTEGER, context TEXT, title TEXT, pic_address TEXT, PRIMARY KEY(Article_id))"
+                    "ALTER TABLE article ADD COLUMN time INTEGER NOT NULL DEFAULT 0"
             );
         }
     };

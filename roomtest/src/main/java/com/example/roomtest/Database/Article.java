@@ -5,6 +5,9 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 //这次存的是图片，而不是基本数据类型
 @Entity
 public class Article {
@@ -21,11 +24,28 @@ public class Article {
 //    private  保存图片咋整啊 - >  保存图片地址
     private String pic_address;
 
+    //java8中新增了LocalDate和LocalTime接口，使用起来更加方便，
+    //但是因为存入SQLite的还是必须要用INTEGER存，所以我们的数据库bean类依然使用long型。
+    //但是在操作中可以使用LocalDateTime接口，然后Date和LocalDateTime的相互转换 https://blog.csdn.net/hspingcc/article/details/73332380
+    private long time;
+
     public Article (boolean isInCreate, String title, String context, String pic_address) {
         this.isInCreate = isInCreate;
         this.context = context;
         this.title = title;
         this.pic_address = pic_address;
+
+        //取得当前时间
+        time = (new Date()).getTime();
+    }
+
+    public Article(Article article) {
+        this.Article_id = article.Article_id;
+        this.isInCreate = article.isInCreate;
+        this.context = article.getContext();
+        this.title = article.getTitle();
+        this.pic_address = article.getPic_address();
+        this.time = (new Date()).getTime();
     }
 
     public int getArticle_id() {
@@ -66,5 +86,13 @@ public class Article {
 
     public void setPic_address(String pic_address) {
         this.pic_address = pic_address;
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
     }
 }

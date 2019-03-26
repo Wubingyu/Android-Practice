@@ -11,6 +11,7 @@ import com.example.roomtest.Database.ArticleDao;
 import com.example.roomtest.Database.User;
 import com.example.roomtest.Database.UserDao;
 
+import java.util.Date;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -39,10 +40,31 @@ public class MainActivity extends AppCompatActivity {
         mUserDao = AppDatabase.getsInstance(MainActivity.this).userDao();
         mArticleDao = AppDatabase.getsInstance(MainActivity.this).articleDao();
         
-        initDB();
+//        initDB();
+
+        //哇 踩坑了，这种子线程的，一定要注意好让线程休眠，留出时间，不然就会乱套了！！！
+        getAllUsers();
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        updateUsers();
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        Log.d(TAG, "Article update ------------------------------------------------------------------ ");
         getAllUsers();
 
     }
+
+
 
 
     private void initDB() {
@@ -100,9 +122,35 @@ public class MainActivity extends AppCompatActivity {
                 subscribe.onNext(article);
             }
         }).subscribeOn(Schedulers.io())
-                .subscribe(article -> Log.d(TAG, "the Article title is: " + ((Article) article).getTitle() + " the context is: " + ((Article) article).getContext()));
+                .subscribe(article -> {
+                    //在表更新之后，之前没有time这个属性的，这个属性是什么呢？
+                    long time = ((Article) article).getTime();
+//                    if (time != 0) {
+//
+//                    }
+
+                    Log.d(TAG, "the Article id is: " +  ((Article) article).getArticle_id() +  " the Article title is: " + ((Article) article).getTitle() + " the context is: " + ((Article) article).getContext()
+                            + " the time is: " + ((Article) article).getTime());
+                });
 
 
         //另一种是Bean中本身就是Rx对象
+    }
+
+    //现在的update只是根据取出的Article的数值，重新新建，以添加Time属性
+    private void updateUsers() {
+        Observable.create(subscribe -> {
+            List<Article> articles = mArticleDao.getAllarticle();
+            for (Article article : articles) {
+                subscribe.onNext(article);
+            }
+        }).subscribeOn(Schedulers.io())
+                .subscribe(article -> {
+                    Article new_article = new Article(((Article) article));
+                    mArticleDao.update(new_article);
+                    Log.d(TAG, "update Article id: " + new_article.getArticle_id() + " and the new time is: " + new_article.getTime());
+
+                });
+
     }
 }
