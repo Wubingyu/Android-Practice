@@ -75,8 +75,7 @@ public class CropPicture extends AppCompatActivity {
 
                     //成功取得bitmap这样之后就存bitmap到数据库就ok了！
                     try {
-                        if(resultUri!=null) {
-                            Bitmap bit = BitmapFactory.decodeStream(getContentResolver().openInputStream(resultUri));
+                        if(resultUri!=null) { Bitmap bit = BitmapFactory.decodeStream(getContentResolver().openInputStream(resultUri));
                             showPic.setImageBitmap(bit);
                         }
                     } catch (Exception e) {
