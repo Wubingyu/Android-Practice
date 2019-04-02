@@ -1,1 +1,1 @@
-include ':RecyclerView_SwipeMenu', ':picture_canvas'
+include ':material_design'
