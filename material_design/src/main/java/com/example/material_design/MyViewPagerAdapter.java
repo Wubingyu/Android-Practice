@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
+import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -32,7 +33,7 @@ public class MyViewPagerAdapter extends FragmentPagerAdapter {
     //联合使用的时候，每个分页的title，都和TabLayout的Tab的设置无关了，全看adapter里的getPageTitle方法
     String[] tabTitleArray = {"第一个", "第二个", "第三个"};
     //这个list也可以从activity初始化的时候传过来
-    List<Fragment> fragments = new ArrayList<>();
+    List<CardFragment> fragments = new ArrayList<>();
 
     public MyViewPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -111,5 +112,22 @@ public class MyViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         return tabTitleArray[position];
+    }
+
+    public CardView getCardViewAt(int position) {
+        return fragments.get(position).getCardView();
+    }
+
+    public void resetCardXY(int position) {
+        List<CardView> cardViews = new ArrayList<>();
+        for (int i = 0; i < getCount(); i++) {
+            if (i != position) {
+                CardView cardView = getCardViewAt(i);
+                cardView.animate().scaleX(1);
+                cardView.animate().scaleY(1);
+                cardView.setElevation(24);
+
+            }
+        }
     }
 }

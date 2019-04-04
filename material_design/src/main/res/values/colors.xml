@@ -4,4 +4,14 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="white">#f6f5f5</color>
+    
+    <color name="pink">#ffd7e8</color>
+    <color name="purple">#866ec7</color>
+    <color name="pink_purple">#f2c0ff</color>
+    <color name="button">#bf9fee</color>
+
+    <color name="summer1_1">#00e0ff</color>
+    <color name="summer1_2">#74f9ff</color>
+    <color name="summer1_3">#a6fff2</color>
+    <color name="summer1_4">#e8ffe8</color>
 </resources>
