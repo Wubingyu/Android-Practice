@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MD_anim</string>
+    <string name="appbar_scrolling_view_behavior">appbar_scrolling_view_behavior</string>
 </resources>

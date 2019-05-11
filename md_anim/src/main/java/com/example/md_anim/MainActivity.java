@@ -1,13 +1,16 @@
 package com.example.md_anim;
 
+import android.content.Intent;
 import android.graphics.drawable.Animatable;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.animation.Animation;
+import android.widget.Button;
 import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
+    Button coordinator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,5 +32,13 @@ public class MainActivity extends AppCompatActivity {
 //        imageView.setBackgroundDrawable(getResources().getDrawable(R.drawable.b1));
 //        imageView.setBackground(getResources().getDrawable(R.drawable.b1));
         imageView.setBackground(this.getDrawable(R.drawable.b1));*/
+
+        coordinator = findViewById(R.id.jump_coordinator);
+        coordinator.setOnClickListener(v -> jump(coordinatorActivity.class));
+    }
+
+    private void jump(Class<?> activity) {
+        Intent intent = new Intent(MainActivity.this, activity);
+        startActivity(intent);
     }
 }
