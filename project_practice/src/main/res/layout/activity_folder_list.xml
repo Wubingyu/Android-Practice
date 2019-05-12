@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--底部导航、卡片集布局、悬浮Button-->
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".myFolder.FolderListActivity">
+
+    <FrameLayout
+        android:id="@+id/fragment_placeholder"
+        android:layout_gravity="top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/BottomNavigation"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom"
+        app:menu="@menu/navigation_bottom"
+        ></android.support.design.widget.BottomNavigationView>
+
+</android.support.design.widget.CoordinatorLayout>

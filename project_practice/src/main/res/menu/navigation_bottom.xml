@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--menu代码-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_bottom_folder_list"
+        android:icon="@drawable/ic_unselected_cards"
+        android:title="收藏"
+        />
+
+    <item android:id="@+id/navigation_bottom_message"
+        android:icon="@drawable/ic_message"
+        android:title="消息"
+        />
+
+    <item android:id="@+id/navigation_bottom_explore"
+        android:icon="@drawable/ic_explore"
+        android:title="发现"/>
+
+    <item android:id="@+id/navigation_bottom_info"
+        android:icon="@drawable/ic_user"
+        android:title="信息"/>
+
+</menu>
