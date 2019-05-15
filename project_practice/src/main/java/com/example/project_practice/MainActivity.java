@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.project_practice.myFolder.BlankFragment;
+import com.example.project_practice.myFolder.FolderListFragment;
 
 import java.util.ArrayList;
 
@@ -25,13 +26,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initFragments() {
-        BlankFragment blankFragment1 = BlankFragment.newInstance("第一个", "1st");
+        FolderListFragment fragment1 = new FolderListFragment();
         BlankFragment blankFragment2 = BlankFragment.newInstance("第二个", "2nd");
         BlankFragment blankFragment3 = BlankFragment.newInstance("第三个", "3rd");
         BlankFragment blankFragment4 = BlankFragment.newInstance("第四个", "4th");
 //        Fragment test = new testFragment();
         Fragment test = testFragment.newInstance("this is testFragment newInstance");
-        fragments.add(blankFragment1);
+        fragments.add(fragment1);
         fragments.add(blankFragment2);
         fragments.add(blankFragment3);
 //        fragments.add(blankFragment4);
