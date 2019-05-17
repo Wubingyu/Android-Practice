@@ -1,4 +1,4 @@
-package com.example.project_practice.myFolder;
+package com.example.project_practice.FolderList;
 
 import android.graphics.Color;
 import android.support.annotation.NonNull;

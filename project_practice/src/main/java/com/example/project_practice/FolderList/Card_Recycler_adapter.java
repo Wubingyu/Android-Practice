@@ -1,4 +1,4 @@
-package com.example.project_practice.myFolder;
+package com.example.project_practice.FolderList;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;

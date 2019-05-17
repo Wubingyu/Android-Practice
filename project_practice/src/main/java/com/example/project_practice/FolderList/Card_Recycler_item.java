@@ -1,4 +1,4 @@
-package com.example.project_practice.myFolder;
+package com.example.project_practice.FolderList;
 
 public class Card_Recycler_item {
     String title;

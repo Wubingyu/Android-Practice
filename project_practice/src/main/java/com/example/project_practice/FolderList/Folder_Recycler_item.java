@@ -1,4 +1,4 @@
-package com.example.project_practice.myFolder;
+package com.example.project_practice.FolderList;
 
 public class Folder_Recycler_item {
     int img_id;

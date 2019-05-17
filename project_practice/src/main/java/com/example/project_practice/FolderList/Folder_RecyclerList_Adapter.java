@@ -1,4 +1,4 @@
-package com.example.project_practice.myFolder;
+package com.example.project_practice.FolderList;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -18,11 +18,21 @@ import com.example.project_practice.R;
 import java.util.ArrayList;
 
 /**
- * 布局卡片
+ * 布局卡片集合
  */
 public class Folder_RecyclerList_Adapter extends RecyclerView.Adapter<Folder_RecyclerList_Adapter.ViewHolder> {
     ArrayList<Folder_Recycler_item> items; //null并没有请求内存空间，所以下面的card_items不能null，因为它要add。但是items是在构造函数中传过来。
     Context context;
+
+    public interface OnClickListener {
+        void onCardClick(ImageView imageView);
+    }
+
+    private OnClickListener listener;
+
+    public void setListener(OnClickListener listener) {
+        this.listener = listener;
+    }
 
     public Folder_RecyclerList_Adapter(ArrayList<Folder_Recycler_item> items, Context context) {
         this.items = items;
@@ -51,6 +61,7 @@ public class Folder_RecyclerList_Adapter extends RecyclerView.Adapter<Folder_Rec
 
         //布局卡片内的RecyclerView
         //这是Card里的RecyclerView,理论上之后应该通过viewHolder的int[]来获取名字
+        //所有Item子项的东西，！！不要不要不要不要！！，放置为成员变量
         ArrayList<Card_Recycler_item> card_items = new ArrayList<>();
 
         Card_Recycler_item item1 = new Card_Recycler_item("伊利亚特");
@@ -61,6 +72,7 @@ public class Folder_RecyclerList_Adapter extends RecyclerView.Adapter<Folder_Rec
         card_items.add(item2);
         card_items.add(item3);
         card_items.add(item4);
+
         Card_Recycler_adapter adapter;
         adapter = new Card_Recycler_adapter(card_items);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
@@ -71,7 +83,11 @@ public class Folder_RecyclerList_Adapter extends RecyclerView.Adapter<Folder_Rec
         ItemTouchHelper.Callback callback = new Card_Recycler_Callback(adapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(viewHolder.recyclerView);
-        //
+
+        //设置点击事件
+        if (listener != null) {
+            viewHolder.cardView.setOnClickListener(v -> listener.onCardClick(viewHolder.imageView));
+        }
 
     }
 

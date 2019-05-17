@@ -1,4 +1,4 @@
-package com.example.project_practice.myFolder;
+package com.example.project_practice.FolderList;
 
 /**
  * 一个可以将这些回调方法传递出去的接口。
@@ -9,10 +9,12 @@ package com.example.project_practice.myFolder;
  * 因此我们可以把数据操作的部分抽象成一个接口方法，让ItemTouchHelper.Callback调用该方法即可。具体如下：
  *
  */
+
 public interface ItemTouchHelperAdapter {
 
     void onItemMove(int fromPosition, int toPosition);
 
     //这个是对应滑动方法，你想要滑动打开就写滑动打开的方法，想要滑动删除就写删除的方法。
+    //我之后要在这个地方改一改哦~。我要设置为滑动打开。
     void onItemDismiss(int position);
 }

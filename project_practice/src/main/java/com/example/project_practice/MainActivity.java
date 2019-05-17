@@ -5,8 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.example.project_practice.myFolder.BlankFragment;
-import com.example.project_practice.myFolder.FolderListFragment;
+import com.example.project_practice.FolderList.BlankFragment;
+import com.example.project_practice.FolderList.FolderListFragment;
 
 import java.util.ArrayList;
 
@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+//        setupWindowAnimations();
         initFragments();
         initView();
 
@@ -27,9 +28,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initFragments() {
         FolderListFragment fragment1 = new FolderListFragment();
-        BlankFragment blankFragment2 = BlankFragment.newInstance("第二个", "2nd");
-        BlankFragment blankFragment3 = BlankFragment.newInstance("第三个", "3rd");
-        BlankFragment blankFragment4 = BlankFragment.newInstance("第四个", "4th");
+        BlankFragment blankFragment2 = new BlankFragment();
+        BlankFragment blankFragment3 = new BlankFragment();
 //        Fragment test = new testFragment();
         Fragment test = testFragment.newInstance("this is testFragment newInstance");
         fragments.add(fragment1);
