@@ -6,11 +6,10 @@
 
     <!-- TODO: Update blank fragment layout -->
     <ImageView
-        android:id="@+id/BlankFragment_2"
+        android:id="@+id/Folder_Fragment_img"
         android:src="@drawable/a"
         android:scaleType="centerCrop"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:transitionName="@string/trans_Card2Folder"/>
+        android:layout_height="200dp"/>
 
 </FrameLayout>

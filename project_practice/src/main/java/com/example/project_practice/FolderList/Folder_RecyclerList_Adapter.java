@@ -25,7 +25,7 @@ public class Folder_RecyclerList_Adapter extends RecyclerView.Adapter<Folder_Rec
     Context context;
 
     public interface OnClickListener {
-        void onCardClick(ImageView imageView);
+        void onCardClick(int i, ImageView imageView);
     }
 
     private OnClickListener listener;
@@ -80,13 +80,15 @@ public class Folder_RecyclerList_Adapter extends RecyclerView.Adapter<Folder_Rec
         viewHolder.recyclerView.setAdapter(adapter);
         viewHolder.recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
 
+        viewHolder.imageView.setTransitionName("transition" + i);
+
         ItemTouchHelper.Callback callback = new Card_Recycler_Callback(adapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
         touchHelper.attachToRecyclerView(viewHolder.recyclerView);
 
         //设置点击事件
         if (listener != null) {
-            viewHolder.cardView.setOnClickListener(v -> listener.onCardClick(viewHolder.imageView));
+            viewHolder.cardView.setOnClickListener(v -> listener.onCardClick(i, viewHolder.imageView));
         }
 
     }

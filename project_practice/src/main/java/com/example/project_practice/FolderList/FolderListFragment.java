@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.example.project_practice.Folder.Folder_Fragment;
+import com.example.project_practice.MainActivity;
 import com.example.project_practice.R;
 import com.example.project_practice.utils.SpaceItemDecoration;
 
@@ -62,10 +64,9 @@ public class FolderListFragment extends Fragment{
 
 
         //设置点击事件
-        adapter.setListener(new Folder_RecyclerList_Adapter.OnClickListener() {
-            @Override
-            public void onCardClick(ImageView imageView) {
-            }
+        adapter.setListener((position, imageView) -> {
+            Folder_Fragment fragment = Folder_Fragment.newInstance("transition" + position);
+            ((MainActivity) getActivity()).showFragmentWithTransition(FolderListFragment.this, fragment, imageView, "transition" + position);
         });
         return view;
     }

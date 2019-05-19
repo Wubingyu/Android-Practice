@@ -1,9 +1,15 @@
 package com.example.project_practice;
 
+import android.os.Build;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.ChangeBounds;
+import android.transition.TransitionInflater;
+import android.view.View;
 
 import com.example.project_practice.FolderList.BlankFragment;
 import com.example.project_practice.FolderList.FolderListFragment;
@@ -63,9 +69,44 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         if (fragment != null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_placeholder,fragment).commit();
+            getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(
+                        R.anim.slide_right_in,
+                        R.anim.slide_left_out,
+                        R.anim.slide_left_in,
+                        R.anim.slide_right_out)
+//                    .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
+//                    .addToBackStack(null)
+                    .replace(R.id.fragment_placeholder, fragment).commit();
             return true;
         }
         return false;
     }
-}
+
+    /**
+     * function to show the fragment
+     *
+     * @param current current visible fragment
+     */
+//    public void showFragmentWithTransition(Fragment current, Fragment newFragment, String tag, View sharedView, String sharedElementName) {
+    public void showFragmentWithTransition(Fragment current, Fragment newFragment, View sharedView, String sharedElementName) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        // check if the fragment is in back stack
+//        boolean fragmentPopped = fragmentManager.popBackStackImmediate(tag, 0);
+//        if (fragmentPopped) {
+//             fragment is pop from backStack
+//        } else {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+//            current.setSharedElementReturnTransition(new ChangeBounds());
+//            current.setExitTransition(TransitionInflater.from(this).inflateTransition(android.R.transition.no_transition));
+//
+            newFragment.setSharedElementEnterTransition(new ChangeBounds());
+//            newFragment.setEnterTransition(TransitionInflater.from(this).inflateTransition(android.R.transition.no_transition));
+        }
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_placeholder, newFragment).addToBackStack(null)
+                .addSharedElement(sharedView, sharedElementName).commit();
+        }
+    }
