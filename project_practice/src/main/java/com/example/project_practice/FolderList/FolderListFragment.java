@@ -30,20 +30,13 @@ public class FolderListFragment extends Fragment{
     ArrayList<Folder_Recycler_item> items = new ArrayList<>();
     Folder_RecyclerList_Adapter adapter;
 
-    public FolderListFragment() {
-        //        if (items.size() == 0) {
-        initItems();
-        if (getActivity() == null) { //上面这行代码是不能写的，因为在使用构造函数的时候，根本没有getActivity()可以获得
-            Log.d(TAG, "FolderListFragment: ");
-        }
-//        }
-    }
-
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: ");
+        if (items.size() == 0) {
+            initItems();
+        }
         adapter = new Folder_RecyclerList_Adapter(items, getActivity());
     }
 

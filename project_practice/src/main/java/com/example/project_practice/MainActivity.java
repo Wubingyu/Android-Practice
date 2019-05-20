@@ -13,6 +13,8 @@ import android.view.View;
 
 import com.example.project_practice.FolderList.BlankFragment;
 import com.example.project_practice.FolderList.FolderListFragment;
+import com.example.project_practice.Message.MessageFragment;
+import com.example.project_practice.Message.Message_List_item;
 
 import java.util.ArrayList;
 
@@ -20,7 +22,10 @@ public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
     ArrayList<Fragment> fragments = new ArrayList<>();
 
+    ArrayList<Message_List_item> message_list_items = new ArrayList<>();
+
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -34,15 +39,23 @@ public class MainActivity extends AppCompatActivity {
 
     private void initFragments() {
         FolderListFragment fragment1 = new FolderListFragment();
-        BlankFragment blankFragment2 = new BlankFragment();
+        initMessageList();
+        Fragment fragment_message = MessageFragment.newInstance(message_list_items);
         BlankFragment blankFragment3 = new BlankFragment();
 //        Fragment test = new testFragment();
         Fragment test = testFragment.newInstance("this is testFragment newInstance");
         fragments.add(fragment1);
-        fragments.add(blankFragment2);
+        fragments.add(fragment_message);
         fragments.add(blankFragment3);
 //        fragments.add(blankFragment4);
         fragments.add(test);
+    }
+
+    private void initMessageList() {
+        Message_List_item item1 = new Message_List_item("朋友一", "上一条消息", "两天前", 0, R.drawable.h);
+        Message_List_item item2 = new Message_List_item("朋友二", "明天一起去吃东西", "3分钟前", 0, R.drawable.i);
+        message_list_items.add(item1);
+        message_list_items.add(item2);
     }
 
     private void initView() {
@@ -68,13 +81,14 @@ public class MainActivity extends AppCompatActivity {
                 fragment = fragments.get(3);
                 break;
         }
+        //想要根据左右，数量的方式实现滑动，就判断i是变大还是变小，i之间的距离是多少。
         if (fragment != null) {
             getSupportFragmentManager().beginTransaction()
                     .setCustomAnimations(
-                        R.anim.slide_right_in,
-                        R.anim.slide_left_out,
-                        R.anim.slide_left_in,
-                        R.anim.slide_right_out)
+                            R.anim.slide_right_in,
+                            R.anim.slide_left_out,
+                            R.anim.slide_left_in,
+                            R.anim.slide_right_out)
 //                    .setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right, R.anim.enter_from_right, R.anim.exit_to_left)
 //                    .addToBackStack(null)
                     .replace(R.id.fragment_placeholder, fragment).commit();
@@ -108,5 +122,5 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_placeholder, newFragment).addToBackStack(null)
                 .addSharedElement(sharedView, sharedElementName).commit();
-        }
     }
+}
