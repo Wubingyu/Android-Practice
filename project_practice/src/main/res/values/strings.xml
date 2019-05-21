@@ -4,4 +4,29 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="trans_Card2Folder">CardImg_FolderList_Folder</string>
+
+    <string name="gakki">新垣结衣（1988年6月11日－）是出生于日本冲绳县那霸市的演员、歌手及模特儿，身高169厘米，血型A型，现为日本LesPros娱乐旗下的艺人。</string>
+    <string name="masami">
+        "夏天就是火花浴衣，长泽雅美\n"
+        "长泽雅美（日语：長澤 まさみ，1987年6月3日－），日本静冈县磐田市出身的女演员。\n"
+    </string>
+
+    <string name="fight_marry">《求婚大作战》（日语：プロポーズ大作戦，英语：Operation Love）是日本富士电视台自2007年4月16日至6月25日间播放的电视剧，于周一晚间九点时段播出。该剧于2007年日本春季剧群中获得最高收视率，由山下智久和长泽雅美主演。</string>
+    <string name="long_vacation">《悠长假期》（日语：ロングバケーション，英语：Long Vacation），日本电视剧，于1996年4月至6月间于富士电视台播出，由木村拓哉与山口智子主演。平均收视率为29.6%，瞬间最高收视率为36.7%。</string>
+
+    <string name="summer_night">
+        "水色に はなびらの浴衣がこの世で一番\n"
+        "似合うのはたぶん君だと思う\n"
+        "よく誘えた 泣きそうだ\n"
+        "夏祭りの最後の日\n"
+        "わたがしを口で溶かす君は\n"
+        "わたがしになりたい僕に言う\n"
+        "楽しいねって\n"
+    </string>
+
+
+    <string name="sakura_ayane">
+        "佐倉綾音とは、正義\n"
+        "佐仓绫音（1994年1月29日－）是日本I'm Enterprise旗下女性声优。出生及成长于东京都。\n"
+    </string>
 </resources>

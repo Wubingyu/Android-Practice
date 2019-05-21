@@ -11,6 +11,8 @@ import android.transition.ChangeBounds;
 import android.transition.TransitionInflater;
 import android.view.View;
 
+import com.example.project_practice.Explore.ExploreFragment;
+import com.example.project_practice.Explore.Explore_list_item;
 import com.example.project_practice.FolderList.BlankFragment;
 import com.example.project_practice.FolderList.FolderListFragment;
 import com.example.project_practice.Message.MessageFragment;
@@ -23,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Fragment> fragments = new ArrayList<>();
 
     ArrayList<Message_List_item> message_list_items = new ArrayList<>();
+    ArrayList<Explore_list_item> explore_list_items = new ArrayList<>();
 
     @Override
 
@@ -41,14 +44,28 @@ public class MainActivity extends AppCompatActivity {
         FolderListFragment fragment1 = new FolderListFragment();
         initMessageList();
         Fragment fragment_message = MessageFragment.newInstance(message_list_items);
-        BlankFragment blankFragment3 = new BlankFragment();
+        initExploreList();
+        ExploreFragment fragment_explore = ExploreFragment.newInstance(explore_list_items);
 //        Fragment test = new testFragment();
         Fragment test = testFragment.newInstance("this is testFragment newInstance");
         fragments.add(fragment1);
         fragments.add(fragment_message);
-        fragments.add(blankFragment3);
+        fragments.add(fragment_explore);
 //        fragments.add(blankFragment4);
         fragments.add(test);
+    }
+
+    private void initExploreList() {
+        Explore_list_item item1 = new Explore_list_item("新垣结衣", getString(R.string.gakki), R.drawable.gakki);
+        Explore_list_item item2 = new Explore_list_item("罗马", "罗马不是一天建成的", R.drawable.i);
+        Explore_list_item item3 = new Explore_list_item("李健", "音乐傲骨", R.drawable.j);
+        Explore_list_item item4 = new Explore_list_item("罗马", "罗马不是一天建成的", R.drawable.i);
+        Explore_list_item item5 = new Explore_list_item("李健", "音乐傲骨", R.drawable.j);
+        explore_list_items.add(item1);
+        explore_list_items.add(item2);
+        explore_list_items.add(item3);
+        explore_list_items.add(item4);
+        explore_list_items.add(item5);
     }
 
     private void initMessageList() {
